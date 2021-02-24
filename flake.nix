@@ -5,7 +5,7 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: {
-    packages.OCIImageFHS = import ./default.nix {
+    packages.OCIImageFHS = import ./bash.nix {
       pkgs = nixpkgs.legacyPackages.${system};
     };
 

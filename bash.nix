@@ -9,13 +9,21 @@ let
 
     targetPkgs = pkgs: (with pkgs; [
       bashInteractive
+      hello
     ]);
   };
 in
   pkgs.dockerTools.buildImage {
     name = "bash-fhs";
-    tag = "latest";
-    contents = bash-env;
+    tag = "0.0.1";
+
+    contents = with pkgs; [ 
+                bashInteractive 
+		coreutils 
+		which 
+		file 
+		bash-env 
+		];
 
     config = {
       Cmd = [ "/bin/bash-env" ];
