@@ -4,100 +4,7 @@
 #set -euxo pipefail
 
 
-IMAGE='localhost/bash-fhs:0.0.1'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && hello'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && dpkg --version'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && python --version'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && julia --version'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs/bin) && hello && python --version && julia --version'
-
-
-# Broken! Why??
-#podman \
-#run \
-#--interactive=true \
-#--rm=true \
-#--tty=false \
-#"$IMAGE" \
-#<< COMMAND
-#ls -al
-#export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH
-#hello
-#COMMAND
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c './nix/store/*-bash-env-fhs/bin/hello'
-
-echo 'Line :' $LINENO
-
-podman \
-run \
---interactive=true \
---rm=true \
---tty=true \
-"$IMAGE" \
-bash -c 'ls -al $(echo /nix/store/*-bash-env-fhs/bin)'
-
-#podman \
-#run \
-#--interactive=true \
-#--rm=true \
-#--tty=true \
-#docker.io/library/debian:bullseye-20210208-slim \
-#bash -c 'apt update && apt install -y wget && wget http://archive.ubuntu.com/ubuntu/pool/main/h/hello/hello_2.10-1_amd64.deb && dpkg --install hello_2.10-1_amd64.deb && hello'
-
+IMAGE='localhost/fhs-oci-image:0.0.1'
 
 echo 'Line :' $LINENO
 podman \
@@ -106,21 +13,8 @@ run \
 --rm=true \
 --tty=true \
 "$IMAGE" \
-bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs/bin) && dpkg --help'
-
-# Broken!
-#echo 'Line :' $LINENO
-#podman \
-#run \
-#--interactive=true \
-#--rm=true \
-#--tty=false \
-#"$IMAGE" \
-#bash \
-#<< COMMAND
-#export PATH=$(echo /nix/store/*-bash-env-fhs/bin)
-#dpkg --help
-#COMMAND
+bash-fhs \
+-c 'id'
 
 echo 'Line :' $LINENO
 podman \
@@ -129,14 +23,131 @@ run \
 --rm=true \
 --tty=false \
 "$IMAGE" \
-bash \
+bash-fhs \
 << COMMAND
-entrypoin-file.sh
+hello
 COMMAND
 
-echo '######################'
 
-# All broken :|
+echo 'Line :' $LINENO
+podman \
+run \
+--interactive=true \
+--rm=true \
+--tty=false \
+"$IMAGE" \
+bash-fhs \
+<< COMMAND
+tests
+COMMAND
+
+
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'export PATH=$(echo /nix/store/*-fhs-env-fhs)/bin:$PATH && dpkg --version'
+#
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && python --version'
+#
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH && julia --version'
+#
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs/bin) && hello && python --version && julia --version'
+#
+#
+## Broken! Why??
+##podman \
+##run \
+##--interactive=true \
+##--rm=true \
+##--tty=false \
+##"$IMAGE" \
+##<< COMMAND
+##ls -al
+##export PATH=$(echo /nix/store/*-bash-env-fhs)/bin:$PATH
+##hello
+##COMMAND
+#
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c './nix/store/*-bash-env-fhs/bin/hello'
+#
+#echo 'Line :' $LINENO
+#
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'ls -al $(echo /nix/store/*-bash-env-fhs/bin)'
+#
+##podman \
+##run \
+##--interactive=true \
+##--rm=true \
+##--tty=true \
+##docker.io/library/debian:bullseye-20210208-slim \
+##bash -c 'apt update && apt install -y wget && wget http://archive.ubuntu.com/ubuntu/pool/main/h/hello/hello_2.10-1_amd64.deb && dpkg --install hello_2.10-1_amd64.deb && hello'
+#
+#
+#echo 'Line :' $LINENO
+#podman \
+#run \
+#--interactive=true \
+#--rm=true \
+#--tty=true \
+#"$IMAGE" \
+#bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs/bin) && dpkg --help'
+#
+## Broken!
+##echo 'Line :' $LINENO
+##podman \
+##run \
+##--interactive=true \
+##--rm=true \
+##--tty=false \
+##"$IMAGE" \
+##bash \
+##<< COMMAND
+##export PATH=$(echo /nix/store/*-bash-env-fhs/bin)
+##dpkg --help
+##COMMAND
+#
 #echo 'Line :' $LINENO
 #podman \
 #run \
@@ -146,25 +157,5 @@ echo '######################'
 #"$IMAGE" \
 #bash \
 #<< COMMAND
-#export PATH=$(echo /nix/store/*-bash-env-fhs/bin)
-#wget http://archive.ubuntu.com/ubuntu/pool/main/h/hello/hello_2.10-1_amd64.deb
-#$(dirname $(dirname $(which hello)))/usr/bin/dpkg --install hello_2.10-1_amd64.deb
+#entrypoin-file.sh
 #COMMAND
-#
-#echo 'Line :' $LINENO
-#podman \
-#run \
-#--interactive=true \
-#--rm=true \
-#--tty=true \
-#"$IMAGE" \
-#bash -c 'echo /nix/store/*-bash-env/bin/bash-env'
-#
-#echo 'Line :' $LINENO
-#podman \
-#run \
-#--interactive=true \
-#--rm=true \
-#--tty=true \
-#"$IMAGE" \
-#bash -c 'export PATH=$(echo /nix/store/*-bash-env-fhs/bin) && wget http://archive.ubuntu.com/ubuntu/pool/main/h/hello/hello_2.10-1_amd64.deb && dpkg --install hello_2.10-1_amd64.deb'
