@@ -2,7 +2,12 @@
 let
   fhs = pkgs.buildFHSUserEnv {
     name = "fhs-env";
-    targetPkgs = pkgs: with pkgs; [ hello ];
+    targetPkgs = pkgs: with pkgs; [
+      coreutils
+      dpkg
+      wget
+      which
+    ];
     runScript = "bash";
   };
 in

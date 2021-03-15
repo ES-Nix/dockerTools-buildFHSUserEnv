@@ -5,11 +5,11 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: {
-    packages.OCIImageFHS = import ./oci-fhs.nix {
-      pkgs = nixpkgs.legacyPackages.${system};
-    };
+      packages.OCIImageFHS = import ./oci-fhs.nix {
+        pkgs = nixpkgs.legacyPackages.${system};
+      };
 
-    defaultPackage = self.packages.${system}.OCIImageFHS;
-  });
+      defaultPackage = self.packages.${system}.OCIImageFHS;
+    });
 
 }
